@@ -6,6 +6,8 @@
     <attr name="clearButtonBackground" format="reference"/>
     <attr name="menuNavigationBarIcon" format="reference" />
 
+    <color name="colorReveal">#50dbff</color>
+
     // Light theme
     <color name="colorPrimary">#7ac7db</color>
     <color name="colorButtonText">#000</color>
@@ -13,6 +15,7 @@
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/colorButtonText</item>
         <item name="android:textColorSecondary">@color/colorDisplayText</item>
         <item name="numberButtonBackground">@drawable/button_background_numeric_selector</item>
@@ -29,6 +32,7 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimaryDarkTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkTheme</item>
         <item name="android:textColorPrimary">@color/colorButtonTextDarkTheme</item>
         <item name="android:textColorSecondary">@color/colorDisplayTextDarkTheme</item>
         <item name="numberButtonBackground">@drawable/button_background_numeric_dark_theme_selector</item>

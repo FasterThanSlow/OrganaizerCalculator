@@ -8,19 +8,21 @@ import android.view.Gravity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_calculator.*
 import android.support.v7.widget.SwitchCompat
-import android.widget.Toast
 import android.os.Vibrator
+import android.support.constraint.ConstraintLayout
+import android.text.method.ScrollingMovementMethod
 import android.widget.Button
 import android.widget.TextView
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.math.BigDecimal
-import java.math.MathContext
+import java.math.RoundingMode
 
 
-class CalculatorActivity : AppCompatActivity() {
+abstract class CalculatorActivity : AppCompatActivity() {
     // TextView used to display the input and output
-    lateinit var txtInput: TextView
+    lateinit var expressionTextView: TextView
     lateinit var resultTextView: TextView
+    lateinit var displayView: ConstraintLayout
     lateinit var clearButton: Button
 
     // Represent whether the lastly pressed key is numeric or not
@@ -46,7 +48,7 @@ class CalculatorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val preferences = getSharedPreferences(CALCULATOR_PREFERENCE, Context.MODE_PRIVATE)
         val useLightTheme = preferences.getBoolean(LIGHT_THEME_PREF, false)
-        isVibrate = preferences.getBoolean(VIBRATION_PREF, false)
+        isVibrate = preferences.getBoolean(VIBRATION_PREF, true)
 
         if(useLightTheme) {
             setTheme(R.style.LightTheme)
@@ -57,20 +59,17 @@ class CalculatorActivity : AppCompatActivity() {
 
         vibe = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        txtInput = findViewById(R.id.formulaTextView)
+        expressionTextView = findViewById(R.id.formulaTextView)
         resultTextView = findViewById(R.id.resultTextView)
+        displayView = findViewById(R.id.display_view)
+
+        expressionTextView.movementMethod = ScrollingMovementMethod()
 
         clearButton = findViewById(R.id.clear_button)
 
         clearButton.setOnLongClickListener{
-            txtInput.text = ""
-            resultTextView.text = ""
-
-            isOperation = false
-            lastDot = false
-            lastNumeric = false
-            stateError = false
-
+            clear()
+            isAfterEqual = false
             return@setOnLongClickListener true }
 
         navigationView = findViewById(R.id.navigation_view)
@@ -103,22 +102,47 @@ class CalculatorActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun clear(){
+        isOperation = false
+        lastDot = false
+        lastNumeric = false
+        stateError = false
+
+        reveal(clearButton, R.color.colorReveal,
+            AnimatorListenerWrapper {
+                expressionTextView.text = ""
+                resultTextView.text = ""
+            })
+    }
+
     fun onMenuButtonClick(v: View){
        navigation_view_layout.openDrawer(Gravity.LEFT)
     }
 
     fun onDigit(view: View) {
         if(isVibrate) vibe.vibrate(50)
+        if(isAfterEqual){
+            isOperation = false
+            lastDot = false
+            lastNumeric = false
+            stateError = false
+            isAfterEqual = false
+
+            expressionTextView.text = ""
+        }
         if (stateError) {
             // If current state is Error, replace the error message
-            txtInput.text = (view as Button).text
+            expressionTextView.text = (view as Button).text
             stateError = false
         } else {
-            val formula = txtInput.text
-            // If not, already there is a valid expression so append to it
-            txtInput.append((view as Button).text)
+            expressionTextView.append((view as Button).text)
             if(isOperation) {
-                resultTextView.text = getTransformedResult(calculate(formula.toString()))
+                try {
+                    resultTextView.text = getTransformedResult(calculate(expressionTextView.text.toString()))
+                } catch (ex: ArithmeticException) {
+                    // Display an error message
+                    resultTextView.text = "Error"
+                }
             }
         }
         // Set the flag
@@ -130,8 +154,12 @@ class CalculatorActivity : AppCompatActivity() {
      */
     fun onDecimalPoint(view: View) {
         if(isVibrate) vibe.vibrate(50)
+        if (isAfterEqual) {
+            isAfterEqual = false
+            lastDot = false
+        }
         if (lastNumeric && !stateError && !lastDot) {
-            txtInput.append(".")
+            expressionTextView.append(".")
             lastNumeric = false
             lastDot = true
         }
@@ -143,18 +171,20 @@ class CalculatorActivity : AppCompatActivity() {
      */
     fun onOperator(view: View) {
         if(isVibrate) vibe.vibrate(50)
+        if (isAfterEqual) isAfterEqual = false
         if (lastNumeric && !stateError) {
             when((view as Button).text){
-                "÷" -> txtInput.append("/")
-                "×" -> txtInput.append("*")
+                "÷" -> expressionTextView.append("/")
+                "×" -> expressionTextView.append("*")
                 else -> {
-                    txtInput.append(view.text)
+                    expressionTextView.append(view.text)
                 }
             }
 
             isOperation = true
             lastNumeric = false
             lastDot = false    // Reset the DOT flag
+
         }
     }
 
@@ -164,11 +194,12 @@ class CalculatorActivity : AppCompatActivity() {
      */
     fun onClear(view: View) {
         if(isVibrate) vibe.vibrate(50)
-        if(this.txtInput.text.length > 1) {
-            this.txtInput.text = this.txtInput.text.substring(0, this.txtInput.text.length - 1)
+        if (isAfterEqual) isAfterEqual = false
+        if(this.expressionTextView.text.length > 1) {
+            this.expressionTextView.text = this.expressionTextView.text.substring(0, this.expressionTextView.text.length - 1)
         }
         else {
-            txtInput.text = ""
+            expressionTextView.text = ""
             isOperation = false
             lastDot = false
             lastNumeric = false
@@ -176,15 +207,25 @@ class CalculatorActivity : AppCompatActivity() {
             resultTextView.text = ""
         }
 
-        if(this.txtInput.text.isNotEmpty()) {
-            if (txtInput.text[txtInput.text.length - 1].toString().toIntOrNull() != null) {
+        if(this.expressionTextView.text.isNotEmpty()) {
+            if (expressionTextView.text[expressionTextView.text.length - 1].toString().toIntOrNull() != null) {
                 lastNumeric = true
                 if(isOperation) {
-                    resultTextView.text = getTransformedResult(calculate(txtInput.text.toString()))
+                    try {
+                        resultTextView.text = getTransformedResult(calculate(expressionTextView.text.toString()))
+                    } catch (ex: ArithmeticException) {
+                        // Display an error message
+                        resultTextView.text = "Error"
+                    }
                 }
             } else {
                 if(isOperation) {
-                    resultTextView.text = getTransformedResult(calculate(this.txtInput.text.substring(0, this.txtInput.text.length - 1)))
+                    try {
+                        resultTextView.text = getTransformedResult(calculate(this.expressionTextView.text.substring(0, this.expressionTextView.text.length - 1)))
+                    } catch (ex: ArithmeticException) {
+                        // Display an error message
+                        resultTextView.text = "Error"
+                    }
                 }
                 lastNumeric = false
             }
@@ -194,6 +235,8 @@ class CalculatorActivity : AppCompatActivity() {
         lastDot = false
     }
 
+    var isAfterEqual = false
+
     /**
      * Calculate the output using Exp4j
      */
@@ -201,24 +244,30 @@ class CalculatorActivity : AppCompatActivity() {
         if(isVibrate) vibe.vibrate(50)
         // If the current state is error, nothing to do.
         // If the last input is a number only, solution can be found.
-        if (lastNumeric && !stateError) {
+        if (lastNumeric && !stateError && !isAfterEqual && resultTextView.text != "") {
             // Read the expression
-            val txt = txtInput.text.toString()
+            val txt = expressionTextView.text.toString()
             // Create an Expression (A class from exp4j library)
             try {
-                txtInput.text = getTransformedResult(calculate(txt))
-                resultTextView.text = ""
+                onResult(getTransformedResult(calculate(txt)))
                 lastDot = true // Result contains a dot
             } catch (ex: ArithmeticException) {
                 // Display an error message
-                txtInput.text = "Error"
+                expressionTextView.text = "Error"
                 stateError = true
                 lastNumeric = false
             }
 
             isOperation = false
+            isAfterEqual = true
         }
     }
+
+    abstract fun cancelAnimation()
+
+    abstract fun reveal(sourceView: View, colorRes: Int, listener: AnimatorListenerWrapper)
+
+    internal abstract fun onResult(result: String)
 
     private fun calculate(value: String): Double{
         val expression = ExpressionBuilder(value).build()
@@ -227,8 +276,7 @@ class CalculatorActivity : AppCompatActivity() {
 
     private fun getTransformedResult(value: Double): String{
         val b1 = BigDecimal(value)
-        val m = MathContext(5)
-        val result = b1.round(m)
+        val result = b1.setScale(5, RoundingMode.HALF_UP)
 
         return result.stripTrailingZeros().toPlainString()
     }
