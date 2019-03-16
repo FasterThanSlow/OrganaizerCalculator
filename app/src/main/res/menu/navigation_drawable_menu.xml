@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_vibration_switch"
+        android:icon="@drawable/menu_vibration_icon"
+        android:title="@string/vibration"
+        app:actionLayout="@layout/menu_theme_switch" />
+    <item
+        android:id="@+id/menu_theme_switch"
+        android:icon="@drawable/menu_theme_icon"
+        android:title="@string/theme"
+        app:actionLayout="@layout/menu_theme_switch"/>
+
+</menu>

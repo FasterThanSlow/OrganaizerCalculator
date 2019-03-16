@@ -1,0 +1,84 @@
+<resources>
+    <dimen name="default_margin">8dp</dimen>
+    <dimen name="button_margin">@dimen/default_margin</dimen>
+
+    <dimen name="formula_text_size">64sp</dimen>
+    <dimen name="result_text_size">36sp</dimen>
+
+    <dimen name="number_button_text_size">40sp</dimen>
+    <dimen name="operator_button_text_size">36sp</dimen>
+    
+    // display
+
+    <style name="FormulaTextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/formula_text_size</item>
+        <item name="android:layout_marginLeft">@dimen/default_margin</item>
+        <item name="android:layout_marginRight">@dimen/default_margin</item>
+        <item name="android:layout_marginStart">@dimen/default_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_margin</item>
+        <item name="android:layout_marginBottom">@dimen/default_margin</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:gravity">end|bottom</item>
+    </style>
+
+    <style name="ResultTextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/result_text_size</item>
+        <item name="android:layout_marginLeft">@dimen/default_margin</item>
+        <item name="android:layout_marginRight">@dimen/default_margin</item>
+        <item name="android:layout_marginStart">@dimen/default_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_margin</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:scrollbars">horizontal</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+    // buttons
+    
+    <style name="NumberButtonStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:textSize">@dimen/number_button_text_size</item>
+        <item name="android:layout_marginTop">@dimen/button_margin</item>
+        <item name="android:layout_marginLeft">@dimen/button_margin</item>
+        <item name="android:layout_marginStart">@dimen/button_margin</item>
+        <item name="android:background">?numberButtonBackground</item>
+    </style>
+
+    <style name="NumberButtonWithRightMarginStyle" parent="NumberButtonStyle">
+        <item name="android:layout_marginRight">@dimen/button_margin</item>
+        <item name="android:layout_marginEnd">@dimen/button_margin</item>
+    </style>
+
+    <style name="NumberButtonWithBottomMarginStyle" parent="NumberButtonStyle">
+        <item name="android:layout_marginBottom">@dimen/button_margin</item>
+    </style>
+
+    <style name="EqualButtonStyle" parent="NumberButtonWithRightMarginStyle">
+        <item name="android:layout_marginBottom">@dimen/button_margin</item>
+        <item name="android:background">?equalButtonBackground</item>
+    </style>
+    
+    <style name="OperatorButtonStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:textSize">@dimen/operator_button_text_size</item>
+        <item name="android:layout_marginTop">@dimen/button_margin</item>
+        <item name="android:layout_marginRight">@dimen/button_margin</item>
+        <item name="android:layout_marginEnd">@dimen/button_margin</item>
+        <item name="android:background">?operatorButtonBackground</item>
+    </style>
+
+    <style name="OperatorButtonWithBottomMarginStyle" parent="OperatorButtonStyle">
+        <item name="android:layout_marginBottom">@dimen/button_margin</item>
+    </style>
+
+    <style name="ClearButtonStyle" parent="OperatorButtonStyle">
+        <item name="android:background">?clearButtonBackground</item>
+    </style>
+
+</resources>
