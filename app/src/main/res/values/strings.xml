@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">OrganaizerCalculator2</string>
+    <string name="app_name">Калькулятор</string>
+
     <string name="_7">7</string>
     <string name="_8">8</string>
     <string name="_9">9</string>
@@ -17,7 +18,16 @@
     <string name="multiplication">×</string>
     <string name="minus">-</string>
     <string name="plus">+</string>
-    <string name="menu_icon">Menu icon</string>
+
+    <string name="menu_icon">Иконка меню</string>
+
     <string name="vibration">Вибрация</string>
-    <string name="theme">Светлая тема</string>
+    <string name="share">Поделиться</string>
+    <string name="feedback">Обратная связь</string>
+    <string name="information">Информация</string>
+
+    <string name="theme_light">Светлая тема</string>
+    <string name="theme_dark">Темная тема</string>
+    <string name="theme_gold">Золотая тема</string>
+
 </resources>

@@ -7,6 +7,8 @@
 
     <dimen name="number_button_text_size">40sp</dimen>
     <dimen name="operator_button_text_size">36sp</dimen>
+
+    <dimen name="menu_navigation_bar_icon_size">24dp</dimen>
     
     // display
 

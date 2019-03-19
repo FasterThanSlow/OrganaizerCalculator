@@ -53,8 +53,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="menu_vibration_icon" />
-                            <entry key="sourceFile" value="C:\Users\User\Desktop\spotify-logo-button.svg" />
+                            <entry key="outputName" value="ic_close_icon" />
+                            <entry key="sourceFile" value="C:\Users\User\Desktop\close-icon.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -11,6 +11,7 @@ import com.nineoldandroids.animation.*
 import com.nineoldandroids.view.ViewHelper
 
 class CalculatorActivityGB : CalculatorActivity() {
+
     private var mCurrentAnimator: Animator? = null
     private var revealColorView: RevealColorView? = null
 

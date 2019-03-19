@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class CalculatorActivityL : CalculatorActivity() {
+
     private var mCurrentAnimator: Animator? = null
 
     override fun cancelAnimation() {

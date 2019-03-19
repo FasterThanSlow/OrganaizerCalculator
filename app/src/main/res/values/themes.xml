@@ -42,4 +42,22 @@
         <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_icon</item>
     </style>
 
+    // Gold theme
+
+    <color name="colorPrimaryGoldTheme">#fffdcf</color>
+    <color name="colorButtonTextGoldTheme">#634911</color>
+    <color name="colorDisplayTextGoldTheme">#634911</color>
+
+    <style name="GoldTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryGoldTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGoldTheme</item>
+        <item name="android:textColorPrimary">@color/colorButtonTextGoldTheme</item>
+        <item name="android:textColorSecondary">@color/colorDisplayTextGoldTheme</item>
+        <item name="numberButtonBackground">@drawable/button_background_numeric_gold_theme_selector</item>
+        <item name="equalButtonBackground">@drawable/button_background_eq_selector</item>
+        <item name="operatorButtonBackground">@drawable/button_background_operator_selector</item>
+        <item name="clearButtonBackground">@drawable/button_background_clear_selector</item>
+        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_icon</item>
+    </style>
+
 </resources>

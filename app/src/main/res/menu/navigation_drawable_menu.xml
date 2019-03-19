@@ -7,10 +7,44 @@
         android:icon="@drawable/menu_vibration_icon"
         android:title="@string/vibration"
         app:actionLayout="@layout/menu_theme_switch" />
+
+    <group
+            android:id="@+id/menu_theme_selector"
+            android:checkableBehavior="single">
+
+        <item
+                android:id="@+id/menu_theme_dark"
+                android:icon="@drawable/menu_theme_icon"
+                android:checked="true"
+                android:onClick=""
+                android:title="@string/theme_dark"/>
+
+        <item
+                android:id="@+id/menu_theme_light"
+                android:icon="@drawable/menu_theme_icon"
+                android:title="@string/theme_light"/>
+
+        <item
+                android:id="@+id/menu_theme_gold"
+                android:icon="@drawable/menu_theme_icon"
+                android:title="@string/theme_gold"/>
+
+    </group>
+
+
     <item
-        android:id="@+id/menu_theme_switch"
-        android:icon="@drawable/menu_theme_icon"
-        android:title="@string/theme"
-        app:actionLayout="@layout/menu_theme_switch"/>
+            android:id="@+id/menu_share_link"
+            android:icon="@drawable/menu_share_icon"
+            android:title="@string/share"/>
+
+    <item
+            android:id="@+id/menu_feedback_link"
+            android:icon="@drawable/menu_feedback_icon"
+            android:title="@string/feedback"/>
+
+    <item
+            android:id="@+id/menu_information_link"
+            android:icon="@drawable/menu_information_icon"
+            android:title="@string/information"/>
 
 </menu>
