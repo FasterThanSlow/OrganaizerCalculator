@@ -1,4 +1,4 @@
-package com.greenkey.nehaj.organaizercalculator2
+package com.greenkey.nehaj.organaizercalculator2.view
 
 import android.animation.*
 import android.annotation.TargetApi
@@ -24,7 +24,7 @@ class CalculatorActivityL : CalculatorActivity() {
         val groupOverlay = window.decorView.overlay as ViewGroupOverlay
 
         val displayRect = Rect()
-        displayView.getGlobalVisibleRect(displayRect)
+        binding.displayView.getGlobalVisibleRect(displayRect)
 
         // Make reveal cover the display and status bar.
         val revealView = View(this)
@@ -75,53 +75,52 @@ class CalculatorActivityL : CalculatorActivity() {
         animatorSet.start()
     }
 
-    override fun onResult(result: String) {
+    override fun onResult(result: String, listener: AnimatorListenerWrapper) {
         // Calculate the values needed to perform the scale and translation animations,
         // accounting for how the scale will affect the final position of the text.
-        val resultScale = expressionTextView.textSize / resultTextView.textSize
+        val resultScale = binding.expressionTextView.textSize / binding.resultTextView.textSize
         val resultTranslationX =
-            (1.0f - resultScale) * (resultTextView.width / 2.0f - resultTextView.paddingEnd)
+            (1.0f - resultScale) * (binding.resultTextView.width / 2.0f - binding.resultTextView.paddingEnd)
         val resultTranslationY =
-            (1.0f - resultScale) * (resultTextView.height / 2.0f - resultTextView.paddingBottom) +
-                    (expressionTextView.bottom - resultTextView.bottom) +
-                    (resultTextView.paddingBottom - expressionTextView.paddingBottom)
-        val formulaTranslationY = -expressionTextView.bottom
+            (1.0f - resultScale) * (binding.resultTextView.height / 2.0f - binding.resultTextView.paddingBottom) +
+                    (binding.expressionTextView.bottom - binding.resultTextView.bottom) +
+                    (binding.resultTextView.paddingBottom - binding.expressionTextView.paddingBottom)
+        val formulaTranslationY = -binding.expressionTextView.bottom
 
         // Use a value animator to fade to the final text color over the course of the animation.
-        val resultTextColor = resultTextView.currentTextColor
-        val formulaTextColor = expressionTextView.currentTextColor
+        val resultTextColor = binding.resultTextView.currentTextColor
+        val formulaTextColor = binding.expressionTextView.currentTextColor
         val textColorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), resultTextColor, formulaTextColor)
-        textColorAnimator.addUpdateListener { valueAnimator -> resultTextView.setTextColor(valueAnimator.animatedValue as Int) }
+        textColorAnimator.addUpdateListener { valueAnimator -> binding.resultTextView.setTextColor(valueAnimator.animatedValue as Int) }
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(
             textColorAnimator,
-            ObjectAnimator.ofFloat(resultTextView, "scaleX", resultScale),
-            ObjectAnimator.ofFloat(resultTextView, "scaleY", resultScale),
-            ObjectAnimator.ofFloat(resultTextView, "translationX", resultTranslationX),
-            ObjectAnimator.ofFloat(resultTextView, "translationY", resultTranslationY),
-            ObjectAnimator.ofFloat(expressionTextView, "translationY", formulaTranslationY.toFloat())
+            ObjectAnimator.ofFloat(binding.resultTextView, "scaleX", resultScale),
+            ObjectAnimator.ofFloat(binding.resultTextView, "scaleY", resultScale),
+            ObjectAnimator.ofFloat(binding.resultTextView, "translationX", resultTranslationX),
+            ObjectAnimator.ofFloat(binding.resultTextView, "translationY", resultTranslationY),
+            ObjectAnimator.ofFloat(binding.expressionTextView, "translationY", formulaTranslationY.toFloat())
         )
         animatorSet.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
         animatorSet.interpolator = AccelerateDecelerateInterpolator()
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
-                resultTextView.text = result
+                listener.onAnimationStart()
             }
 
             override fun onAnimationEnd(animation: Animator) {
-                // Reset all of the values modified during the animation.
-                resultTextView.setTextColor(resultTextColor)
-                resultTextView.scaleX = 1.0f
-                resultTextView.scaleY = 1.0f
-                resultTextView.translationX = 0.0f
-                resultTextView.translationY = 0.0f
-                expressionTextView.translationY = 0.0f
+                binding.resultTextView.setTextColor(resultTextColor)
+                binding.resultTextView.scaleX = 1.0f
+                binding.resultTextView.scaleY = 1.0f
+                binding.resultTextView.translationX = 0.0f
+                binding.resultTextView.translationY = 0.0f
+                binding.expressionTextView.translationY = 0.0f
 
-                // Finally update the formula to use the current result.
-                expressionTextView.text = result
-                resultTextView.text = ""
+                binding.expressionTextView.text = binding.resultTextView.text
+                binding.resultTextView.text = ""
 
+                listener.onAnimationEnd()
                 mCurrentAnimator = null
             }
         })

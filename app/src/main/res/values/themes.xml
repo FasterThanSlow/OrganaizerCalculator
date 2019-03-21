@@ -5,6 +5,7 @@
     <attr name="operatorButtonBackground" format="reference"/>
     <attr name="clearButtonBackground" format="reference"/>
     <attr name="menuNavigationBarIcon" format="reference" />
+    <attr name="buttonsBackground" format="reference" />
 
     <color name="colorReveal">#50dbff</color>
 
@@ -22,7 +23,8 @@
         <item name="equalButtonBackground">@drawable/button_background_eq_selector</item>
         <item name="operatorButtonBackground">@drawable/button_background_operator_selector</item>
         <item name="clearButtonBackground">@drawable/button_background_clear_selector</item>
-        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_icon</item>
+        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_selector</item>
+        <item name="buttonsBackground">@drawable/calculator_buttons_background</item>
     </style>
 
     // Dark theme
@@ -39,25 +41,50 @@
         <item name="equalButtonBackground">@drawable/button_background_eq_selector</item>
         <item name="operatorButtonBackground">@drawable/button_background_operator_selector</item>
         <item name="clearButtonBackground">@drawable/button_background_clear_selector</item>
-        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_icon</item>
+        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_selector</item>
+        <item name="buttonsBackground">@drawable/calculator_buttons_background</item>
     </style>
 
     // Gold theme
 
     <color name="colorPrimaryGoldTheme">#fffdcf</color>
+    <color name="colorPrimaryDarkGoldTheme">#616152</color>
     <color name="colorButtonTextGoldTheme">#634911</color>
     <color name="colorDisplayTextGoldTheme">#634911</color>
+    <color name="colorButtonsBackground">#faf47b</color>
 
     <style name="GoldTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimaryGoldTheme</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryGoldTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkGoldTheme</item>
         <item name="android:textColorPrimary">@color/colorButtonTextGoldTheme</item>
         <item name="android:textColorSecondary">@color/colorDisplayTextGoldTheme</item>
         <item name="numberButtonBackground">@drawable/button_background_numeric_gold_theme_selector</item>
-        <item name="equalButtonBackground">@drawable/button_background_eq_selector</item>
-        <item name="operatorButtonBackground">@drawable/button_background_operator_selector</item>
-        <item name="clearButtonBackground">@drawable/button_background_clear_selector</item>
-        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_icon</item>
+        <item name="equalButtonBackground">@drawable/button_background_operator_gold_theme_selector</item>
+        <item name="operatorButtonBackground">@drawable/button_background_numeric_gold_theme_selector</item>
+        <item name="clearButtonBackground">@drawable/button_background_operator_gold_theme_selector</item>
+        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_gold_theme_selector</item>
+        <item name="buttonsBackground">@color/colorButtonsBackground</item>
+    </style>
+
+    // Blue theme
+
+    <color name="colorPrimaryBlueTheme">#cfe8e6</color>
+    <color name="colorPrimaryDarkBlueTheme">#84cac3</color>
+    <color name="colorButtonTextBlueTheme">#8066e0</color>
+    <color name="colorDisplayTextBlueTheme">#8066e0</color>
+    <color name="colorButtonsBlueBackground">#84cac3</color>
+
+    <style name="BlueTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlueTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlueTheme</item>
+        <item name="android:textColorPrimary">@color/colorButtonTextBlueTheme</item>
+        <item name="android:textColorSecondary">@color/colorDisplayTextBlueTheme</item>
+        <item name="numberButtonBackground">@drawable/button_background_operator_blue_theme_selector</item>
+        <item name="equalButtonBackground">@drawable/button_background_operator_blue_theme_selector</item>
+        <item name="operatorButtonBackground">@drawable/button_background_operator_blue_theme_selector</item>
+        <item name="clearButtonBackground">@drawable/button_background_operator_blue_theme_selector</item>
+        <item name="menuNavigationBarIcon">@drawable/menu_navigation_bar_blue_theme_selector</item>
+        <item name="buttonsBackground">@color/colorButtonsBlueBackground</item>
     </style>
 
 </resources>
