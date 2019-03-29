@@ -85,7 +85,8 @@ class CalculatorViewModel : ViewModel(), LifecycleObserver {
             }
         }
 
-        lastState = currentState
+        if(!(!isHasOperator(_expression.value!!) && currentState == State.EQUAL))
+            lastState = currentState
     }
 
     private fun doOperation(state: State){
@@ -149,8 +150,8 @@ class CalculatorViewModel : ViewModel(), LifecycleObserver {
     }
 
     fun copyHistoryToExpression(position: Int){
-        if(isHasOperator(_expression.value!!)) {
-            _expression.value += getTransformedResult(calculate(history.value!![position])!!)
+        if(lastState != State.NUMERIC) {
+            _expression.value += history.value!![position]
 
             val resultBuff = calculate(_expression.value!!)
             if (resultBuff != null) {
@@ -161,7 +162,7 @@ class CalculatorViewModel : ViewModel(), LifecycleObserver {
                 _result.value = "Ошибка"
             }
         }
-        else{
+        else {
             _expression.value = history.value!![position]
             _result.value = getTransformedResult(calculate(_expression.value!!)!!)
         }
@@ -182,7 +183,7 @@ class CalculatorViewModel : ViewModel(), LifecycleObserver {
     }
 
     fun clearHistory(){
-        _history.value = ArrayList<String>()
+        _history.value = ArrayList()
     }
 
 }

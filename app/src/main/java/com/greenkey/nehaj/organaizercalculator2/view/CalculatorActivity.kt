@@ -12,14 +12,12 @@ import android.os.Vibrator
 import android.text.method.ScrollingMovementMethod
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.databinding.DataBindingUtil
 import android.net.Uri
 import android.util.TypedValue
 import android.view.Gravity
-import android.widget.*
 import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import com.greenkey.nehaj.organaizercalculator2.model.CalculatorViewModel
@@ -28,10 +26,8 @@ import com.greenkey.nehaj.organaizercalculator2.databinding.ActivityCalculatorBi
 import com.greenkey.nehaj.organaizercalculator2.model.AnimationType
 import com.greenkey.nehaj.organaizercalculator2.utils.getStringArrayList
 import com.greenkey.nehaj.organaizercalculator2.utils.putStringArrayList
-import android.view.animation.AnimationUtils.loadAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import com.greenkey.nehaj.organaizercalculator2.utils.ThemeType
 
 
 abstract class CalculatorActivity : AppCompatActivity() {
@@ -71,7 +67,9 @@ abstract class CalculatorActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(CalculatorViewModel::class.java)
         vibe = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        binding = DataBindingUtil.setContentView<ActivityCalculatorBinding>(this,
+        initColors()
+
+        binding = DataBindingUtil.setContentView(this,
             R.layout.activity_calculator
         )
 
@@ -80,7 +78,7 @@ abstract class CalculatorActivity : AppCompatActivity() {
 
         viewModel.animationType.observe(this, Observer {onAnimationUse(it)})
 
-        viewModel.initHistory(preferences.getStringArrayList(HISTORY_PREF, ArrayList<String>())!!)
+        viewModel.initHistory(preferences.getStringArrayList(HISTORY_PREF, ArrayList())!!)
         viewModel.history.observe(this, Observer {
             preferences.edit().putStringArrayList(HISTORY_PREF,it).apply()
             val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, it)
@@ -117,7 +115,7 @@ abstract class CalculatorActivity : AppCompatActivity() {
             return@setOnMenuItemClickListener true
         }
 
-        binding.historyListView.setOnItemClickListener { parent, view, position, id -> viewModel.copyHistoryToExpression(position) }
+        binding.historyListView.setOnItemClickListener { _, _, position, _ -> viewModel.copyHistoryToExpression(position) }
         drawerVibrationSwitch.setOnCheckedChangeListener { _, isChecked -> toggleVibration(isChecked) }
         binding.displayView.setOnClickListener { showHistory() }
         binding.resultTextView.setOnClickListener { showHistory() }
@@ -181,8 +179,6 @@ abstract class CalculatorActivity : AppCompatActivity() {
         return true
     }
 
-    var oldBackground: Drawable? = null
-
     private fun showHistory(): Boolean{
         val animSlideDown = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down)
 
@@ -191,15 +187,29 @@ abstract class CalculatorActivity : AppCompatActivity() {
         binding.operatorEqualsHistory.visibility = View.VISIBLE
         binding.clearButton.visibility = View.GONE
 
-        val background = TypedValue()
-        val theme = theme
-        oldBackground = binding.buttonsContainerLayout.background
-        theme.resolveAttribute(R.attr.colorPrimary,background, false)
-        binding.buttonsContainerLayout.setBackgroundColor(resources.getColor(background.data))
+        binding.buttonsContainerLayout.setBackgroundResource(backgroundDisplay)
         binding.historyContainer.startAnimation(animSlideDown)
 
 
         return true
+    }
+
+    private var backgroundDisplay: Int = 0
+    private var backgroundButtons: Int = 0
+
+    private fun initColors() {
+        val typedValue = TypedValue()
+        val typedArray = themedContext.obtainStyledAttributes(
+            typedValue.data, intArrayOf(
+                R.attr.colorPrimary,
+                R.attr.buttonsBackground))
+
+        var index = 0
+
+        backgroundDisplay = typedArray.getResourceId(index, 0)
+        backgroundButtons = typedArray.getResourceId(++index, 0)
+
+        typedArray.recycle()
     }
 
 
@@ -214,15 +224,7 @@ abstract class CalculatorActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                if(oldBackground is ColorDrawable){
-                    val background = TypedValue()
-                    val theme = theme
-                    theme.resolveAttribute(R.attr.buttonsBackground,background, false)
-                    binding.buttonsContainerLayout.setBackgroundColor(resources.getColor(background.data))
-                }
-                else {
-                    binding.buttonsContainerLayout.background = oldBackground
-                }
+                binding.buttonsContainerLayout.setBackgroundResource(backgroundButtons)
                 binding.historyContainer.visibility = View.GONE
                 binding.operatorEqualsHistory.visibility = View.GONE
                 binding.clearButton.visibility = View.VISIBLE
